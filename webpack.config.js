@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+const WebpackMd5Hash = require('webpack-md5-hash');
 
 module.exports = {
   entry: './src/main.js',
@@ -127,6 +128,10 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    new WebpackMd5Hash(),
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    }),
   ])
 }
