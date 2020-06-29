@@ -1,9 +1,14 @@
 var path = require('path')
 var webpack = require('webpack')
 const WebpackMd5Hash = require('webpack-md5-hash');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+  entry:'./src/main.js',
+  // output: {
+  //   path: path.resolve(__dirname, 'dist'),
+  //   filename: (chunkData) => (chunkData.chunk.name === 'main' ? '[name].[hash].js' : '[name]/[name].[hash].js'),
+  // },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -92,8 +97,16 @@ module.exports = {
           name: '[name].[ext]?[hash]'
         }
       }
-    ]
+    ],
   },
+  plugins: [
+      new HtmlWebpackPlugin({
+        // inject: false,
+        hash: true,
+        template: './src/index.html',
+        filename: 'index.html',
+      }),
+    ],
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
@@ -119,6 +132,12 @@ if (process.env.NODE_ENV === 'production') {
       'process.env': {
         NODE_ENV: '"production"'
       }
+    }),
+    new webpack.HtmlWebpackPlugin({
+      inject: false,
+      hash: true,
+      template: './src/index.html',
+      filename: 'index.html',
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
